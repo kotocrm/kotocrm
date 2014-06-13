@@ -7,7 +7,7 @@
     <tbody>
         <tr>
             <td style="width: 25%;">Conta</td>
-            <td><a href="account.php">DropComm Ltda</a></td>
+            <td><a href="account.php">Empresa 123 Ltda</a></td>
         </tr>
         <tr>
             <td>Quantidade</td>
