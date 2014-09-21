@@ -51,7 +51,7 @@ class IndexController extends AbstractActionController
 
         $contact = new \Application\Entity\Contact();
         $contact->setName('Igor Cemim');
-        $contact->setEmail('igor@cemim.com.br');
+        $contact->setEmail('igor@dominio.com.br');
         $contact->setPhone('(51) 1234.5678');
 
         $em->persist($contact);
