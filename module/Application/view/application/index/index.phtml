@@ -16,6 +16,7 @@
                             <th>Nome</th>
                             <th>E-mail</th>
                             <th>Telefone</th>
+                            <th>Ações</th>
                         </tr>
                     </thead>
                     <?php foreach ($records as $record) : ?>
@@ -25,6 +26,20 @@
                             <td><?php echo $record->getName() ?></td>
                             <td><?php echo $record->getEmail() ?></td>
                             <td><?php echo $record->getPhone() ?></td>
+                            <td>
+                                <a href="<?php echo $this->url(
+                                    'application', array(
+                                        'action' => 'edit',
+                                        'id' => $record->getId(),
+                                    )
+                                ) ?>">Editar</a>
+                                <a href="<?php echo $this->url(
+                                    'application', array(
+                                        'action' => 'delete',
+                                        'id' => $record->getId(),
+                                    )
+                                ) ?>">Apagar</a>
+                            </td>
                         </tr>
                     </tbody>
                     <?php endforeach ?>
@@ -34,6 +49,7 @@
                 <?php endif ?>
             </div>
         </div>
+        <a class="btn btn-primary" href="<?php echo $this->url('application', array('action' => 'add')) ?>">Cadastrar novo</a>
     </div>
 
 </div>

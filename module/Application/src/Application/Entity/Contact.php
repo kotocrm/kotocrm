@@ -17,6 +17,9 @@ class Contact
 
     /** @ORM\Column(type="string") */
     private $name;
+    
+    /** @ORM\Column(type="string", nullable=true) */
+    private $state;
 
     /** @ORM\Column(type="string", nullable=true) */
     private $city;
@@ -50,6 +53,11 @@ class Contact
     public function getName()
     {
         return $this->name;
+    }
+
+    public function getState()
+    {
+        return $this->state;
     }
 
     public function getCity()
@@ -104,6 +112,12 @@ class Contact
         return $this;
     }
 
+    public function setState($state)
+    {
+        $this->state = $state;
+        return $this;
+    }
+
     public function setCity($city)
     {
         $this->city = $city;
@@ -148,7 +162,7 @@ class Contact
 
     public function setBirthDate($birthDate)
     {
-        $this->birthDate = $birthDate;
+        $this->birthDate = new \DateTime($birthDate);
         return $this;
     }
 
