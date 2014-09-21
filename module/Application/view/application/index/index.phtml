@@ -1,0 +1,39 @@
+
+<div class="row">
+
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Contatos</h3>
+            </div>
+
+            <div class="panel-body">
+                <?php if ($records) : ?>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>E-mail</th>
+                            <th>Telefone</th>
+                        </tr>
+                    </thead>
+                    <?php foreach ($records as $record) : ?>
+                    <tbody>
+                        <tr>
+                            <td><?php echo $record->getId() ?></td>
+                            <td><?php echo $record->getName() ?></td>
+                            <td><?php echo $record->getEmail() ?></td>
+                            <td><?php echo $record->getPhone() ?></td>
+                        </tr>
+                    </tbody>
+                    <?php endforeach ?>
+                </table>
+                <?php else : ?>
+                <p>Nenhum registro encontrado.</p>
+                <?php endif ?>
+            </div>
+        </div>
+    </div>
+
+</div>
