@@ -162,8 +162,10 @@ class Contact
 
     public function setBirthDate($birthDate)
     {
-        $this->birthDate = new \DateTime($birthDate);
+        if (!empty($birthDate)) {
+            $this->birthDate = new \DateTime($birthDate);
+        }
+
         return $this;
     }
-
 }
