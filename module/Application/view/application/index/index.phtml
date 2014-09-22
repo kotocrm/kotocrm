@@ -2,6 +2,18 @@
 <div class="row">
 
     <div class="col-md-12">
+        <?php
+        echo $this->flashMessenger()
+            ->setMessageOpenFormat('<div class="alert alert-info alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+            </button>
+            <p>')
+            ->setMessageSeparatorString('</p><p>')
+            ->setMessageCloseString('</p></div>')
+            ->render('info', array('alert', 'alert-info', 'alert-dismissible'));
+        ?>
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">Contatos</h3>
@@ -28,13 +40,13 @@
                             <td><?php echo $record->getPhone() ?></td>
                             <td>
                                 <a href="<?php echo $this->url(
-                                    'application', array(
+                                    'contact', array(
                                         'action' => 'edit',
                                         'id' => $record->getId(),
                                     )
                                 ) ?>">Editar</a>
                                 <a href="<?php echo $this->url(
-                                    'application', array(
+                                    'contact', array(
                                         'action' => 'delete',
                                         'id' => $record->getId(),
                                     )
@@ -49,7 +61,7 @@
                 <?php endif ?>
             </div>
         </div>
-        <a class="btn btn-primary" href="<?php echo $this->url('application', array('action' => 'add')) ?>">Cadastrar novo</a>
+        <a class="btn btn-primary" href="<?php echo $this->url('contact', array('action' => 'add')) ?>">Cadastrar novo</a>
     </div>
 
 </div>

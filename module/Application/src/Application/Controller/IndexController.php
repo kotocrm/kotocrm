@@ -28,14 +28,12 @@ class IndexController extends AbstractActionController
         return $this->em;
     }
 
-    private function setData(array $data, $entity)
+    private function setEntityData(array $data, $entity)
     {
-        foreach ($data as $key => $value) {
-            $set = "set" . ucfirst($key);
-            $entity->$set($value);
+        foreach ($data as $propertyName => $value) {
+            $setterMethod = "set" . ucfirst($propertyName);
+            $entity->$setterMethod($value);
         }
-
-        return $entity;
     }
 
     public function indexAction()
@@ -47,9 +45,7 @@ class IndexController extends AbstractActionController
                        ->getQuery()
                        ->getResult();
 
-        return new ViewModel(array(
-            'records' => $contacts,
-        ));
+        return new ViewModel(array('records' => $contacts));
     }
 
     public function addAction()
@@ -59,10 +55,11 @@ class IndexController extends AbstractActionController
 
         if ($this->getRequest()->isPost()) {
             $data = $this->params()->fromPost();
-            $entity = $this->setData($data, $entity);
+            $this->setEntityData($data, $entity);
             $em->persist($entity);
             $em->flush();
 
+            $this->flashMessenger()->addInfoMessage('Registro cadastrado com sucesso.');
             $this->redirect()->toRoute('application', array('action' => 'index'));
         }
 
@@ -82,10 +79,11 @@ class IndexController extends AbstractActionController
 
         if ($this->getRequest()->isPost()) {
             $data = $this->params()->fromPost();
-            $entity = $this->setData($data, $entity);
+            $this->setEntityData($data, $entity);
             $em->persist($entity);
             $em->flush();
 
+            $this->flashMessenger()->addInfoMessage('Registro atualizado com sucesso.');
             $this->redirect()->toRoute('application', array('action' => 'index'));
         }
 
@@ -104,8 +102,8 @@ class IndexController extends AbstractActionController
         $entity = $em->find('Application\Entity\Contact', $id);
         $em->remove($entity);
         $em->flush();
-        
+
+        $this->flashMessenger()->addInfoMessage('Registro apagado com sucesso.');
         $this->redirect()->toRoute('application', array('action' => 'index'));
     }
-
 }
