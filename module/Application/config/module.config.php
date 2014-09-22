@@ -24,6 +24,7 @@ return array(
     ),
     'router' => array(
         'routes' => array(
+            
             'home' => array(
                 'type' => 'literal',
                 'options' => array(
@@ -34,18 +35,45 @@ return array(
                     ),
                 ),
             ),
-            'application' => array(
+            
+            'contact' => array(
                 'type'    => 'Segment',
                 'options' => array(
-                    'route'    => '/[:controller[/:action]][/:id]',
+                    'route' => '/contact[/:action][/:id]',
                     'constraints' => array(
-                        'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id' => '[0-9]*',
                     ),
+                    'defaults' => array(
+                        'controller' => 'Application\Controller\Index',
+                        'action' => 'index',
+                    ),
+                ),
+            ),
+            
+            'application' => array(
+                'type'    => 'Literal',
+                'options' => array(
+                    'route'    => '/',
                     'defaults' => array(
                         '__NAMESPACE__' => 'Application\Controller',
                         'controller'    => 'Index',
                         'action'        => 'index',
+                    ),
+                ),
+                'may_terminate' => true,
+                'child_routes' => array(
+                    'default' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/[:controller[/:action]]',
+                            'constraints' => array(
+                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            ),
+                            'defaults' => array(
+                            ),
+                        ),
                     ),
                 ),
             ),
