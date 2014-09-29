@@ -4,6 +4,8 @@ namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Application\Form\ContactForm;
+use Application\Model\ContactModel;
 
 class IndexController extends AbstractActionController
 {
@@ -50,20 +52,28 @@ class IndexController extends AbstractActionController
 
     public function addAction()
     {
-        $em = $this->getEm();
-        $entity = new \Application\Entity\Contact();
+        $form = new ContactForm();
 
         if ($this->getRequest()->isPost()) {
+            $model = new ContactModel();
             $data = $this->params()->fromPost();
-            $this->setEntityData($data, $entity);
-            $em->persist($entity);
-            $em->flush();
+            $form->setInputFilter($model->getInputFilter());
+            $form->setData($data);
 
-            $this->flashMessenger()->addInfoMessage('Registro cadastrado com sucesso.');
-            $this->redirect()->toRoute('application', array('action' => 'index'));
+            if ($form->isValid()) {
+                $hydrator = new \Zend\Stdlib\Hydrator\ClassMethods();
+                $em = $this->getEm();
+                $entity = new \Application\Entity\Contact();
+                $hydrator->hydrate($data, $entity);
+                $em->persist($entity);
+                $em->flush();
+
+                $this->flashMessenger()->addInfoMessage('Registro cadastrado com sucesso.');
+                $this->redirect()->toRoute('application', array('action' => 'index'));
+            }
         }
 
-        return new ViewModel();
+        return new ViewModel(array('form' => $form));
     }
 
     public function editAction()
