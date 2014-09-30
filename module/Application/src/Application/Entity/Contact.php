@@ -1,10 +1,11 @@
 <?php
-
 namespace Application\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/** @ORM\Entity */
+/**
+ * @ORM\Entity
+ */
 class Contact
 {
 
@@ -15,36 +16,56 @@ class Contact
      */
     private $id;
 
-    /** @ORM\Column(type="string") */
+    /**
+     * @ORM\Column(type="string")
+     */
     private $name;
-    
-    /** @ORM\Column(type="string", nullable=true) */
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
     private $state;
 
-    /** @ORM\Column(type="string", nullable=true) */
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
     private $city;
-    
-    /** @ORM\Column(type="string", nullable=true) */
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
     private $district;
-    
-    /** @ORM\Column(type="string", nullable=true) */
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
     private $address;
-    
-    /** @ORM\Column(type="string") */
+
+    /**
+     * @ORM\Column(type="string")
+     */
     private $email;
-    
-    /** @ORM\Column(type="string", nullable=true) */
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
     private $phone;
-    
-    /** @ORM\Column(type="string", nullable=true) */
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
     private $cpf;
-    
-    /** @ORM\Column(type="string", nullable=true) */
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
     private $rg;
 
-    /** @ORM\Column(type="date", nullable=true) */
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     */
     private $birthDate;
-    
+
     public function getId()
     {
         return $this->id;
@@ -162,7 +183,7 @@ class Contact
 
     public function setBirthDate($birthDate)
     {
-        if (!empty($birthDate)) {
+        if (! empty($birthDate)) {
             $this->birthDate = new \DateTime($birthDate);
         }
 

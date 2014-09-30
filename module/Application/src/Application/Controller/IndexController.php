@@ -1,119 +1,56 @@
 <?php
-
 namespace Application\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
-use Application\Form\ContactForm;
-use Application\Model\ContactModel;
+use Application\Form\Contact as ContactForm;
+use Application\Filter\Contact as ContactFilter;
+use Application\Entity\Contact as ContactEntity;
 
-class IndexController extends AbstractActionController
+class IndexController extends CrudController
 {
 
     /**
-     *
-     * @var \Doctrine\ORM\EntityManager
+     * 
+     * @return string
      */
-    private $em;
+    public function getEntityClass()
+    {
+        return 'Application\Entity\Contact';
+    }
 
     /**
      * 
-     * @return \Doctrine\ORM\EntityManager
+     * @return \Application\Entity\Contact
      */
-    private function getEm()
+    protected function getEntity()
     {
-        if ($this->em === null) {
-            $this->em = $this->getServiceLocator()
-                             ->get('Doctrine\ORM\EntityManager');
-        }
-
-        return $this->em;
+        return new ContactEntity();
     }
 
-    private function setEntityData(array $data, $entity)
+    /**
+     * 
+     * @param integer $id
+     * @return \Application\Entity\Contact
+     */
+    public function getEntityById($id)
     {
-        foreach ($data as $propertyName => $value) {
-            $setterMethod = "set" . ucfirst($propertyName);
-            $entity->$setterMethod($value);
-        }
+        return $this->getEm()->find('Application\Entity\Contact', $id);
     }
 
-    public function indexAction()
+    /**
+     * 
+     * @return \Application\Form\Contact
+     */
+    protected function getForm()
     {
-        $em = $this->getEm();
-        $contacts = $em->createQueryBuilder()
-                       ->select('c')
-                       ->from('Application\Entity\Contact', 'c')
-                       ->getQuery()
-                       ->getResult();
-
-        return new ViewModel(array('records' => $contacts));
+        return new ContactForm();
     }
 
-    public function addAction()
+    /**
+     * 
+     * @return \Application\Filter\Contact
+     */
+    protected function getFilter()
     {
-        $form = new ContactForm();
-
-        if ($this->getRequest()->isPost()) {
-            $model = new ContactModel();
-            $data = $this->params()->fromPost();
-            $form->setInputFilter($model->getInputFilter());
-            $form->setData($data);
-
-            if ($form->isValid()) {
-                $hydrator = new \Zend\Stdlib\Hydrator\ClassMethods();
-                $em = $this->getEm();
-                $entity = new \Application\Entity\Contact();
-                $hydrator->hydrate($data, $entity);
-                $em->persist($entity);
-                $em->flush();
-
-                $this->flashMessenger()->addInfoMessage('Registro cadastrado com sucesso.');
-                $this->redirect()->toRoute('application', array('action' => 'index'));
-            }
-        }
-
-        return new ViewModel(array('form' => $form));
-    }
-
-    public function editAction()
-    {
-        $id = (int) $this->params()->fromRoute('id', 0);
-
-        if (!$id) {
-            throw new \BadMethodCallException('O parâmetro id é inválido ou não foi informado.');
-        }
-
-        $em = $this->getEm();
-        $entity = $em->find('Application\Entity\Contact', $id);
-
-        if ($this->getRequest()->isPost()) {
-            $data = $this->params()->fromPost();
-            $this->setEntityData($data, $entity);
-            $em->persist($entity);
-            $em->flush();
-
-            $this->flashMessenger()->addInfoMessage('Registro atualizado com sucesso.');
-            $this->redirect()->toRoute('application', array('action' => 'index'));
-        }
-
-        return new ViewModel(array('entity' => $entity));
-    }
-
-    public function deleteAction()
-    {
-        $id = (int) $this->params()->fromRoute('id', 0);
-
-        if (!$id) {
-            throw new \BadMethodCallException('O parâmetro id é inválido ou não foi informado.');
-        }
-
-        $em = $this->getEm();
-        $entity = $em->find('Application\Entity\Contact', $id);
-        $em->remove($entity);
-        $em->flush();
-
-        $this->flashMessenger()->addInfoMessage('Registro apagado com sucesso.');
-        $this->redirect()->toRoute('application', array('action' => 'index'));
+        return new ContactFilter();
     }
 }

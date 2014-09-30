@@ -1,12 +1,11 @@
 <?php
-
-namespace Application\Model;
+namespace Application\Filter;
 
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 
-class ContactModel implements InputFilterAwareInterface
+class Contact implements InputFilterAwareInterface
 {
 
     protected $inputFilter;
@@ -18,23 +17,27 @@ class ContactModel implements InputFilterAwareInterface
 
     public function getInputFilter()
     {
-        if (!$this->inputFilter) {
+        if (! $this->inputFilter) {
             $inputFilter = new InputFilter();
 
-//            $inputFilter->add(array(
-//                'name' => 'id',
-//                'required' => true,
-//                'filters' => array(
-//                    array('name' => 'Int'),
-//                ),
-//            ));
+            // $inputFilter->add(array(
+            // 'name' => 'id',
+            // 'required' => true,
+            // 'filters' => array(
+            // array('name' => 'Int'),
+            // ),
+            // ));
 
             $inputFilter->add(array(
                 'name' => 'name',
                 'required' => true,
                 'filters' => array(
-                    array('name' => 'StripTags'),
-                    array('name' => 'StringTrim'),
+                    array(
+                        'name' => 'StripTags'
+                    ),
+                    array(
+                        'name' => 'StringTrim'
+                    )
                 ),
                 'validators' => array(
                     array(
@@ -43,18 +46,22 @@ class ContactModel implements InputFilterAwareInterface
                             'message' => 'Campo obrigatório',
                             'encoding' => 'UTF-8',
                             'min' => 1,
-                            'max' => 100,
-                        ),
-                    ),
-                ),
+                            'max' => 100
+                        )
+                    )
+                )
             ));
 
             $inputFilter->add(array(
                 'name' => 'state',
                 'required' => true,
                 'filters' => array(
-                    array('name' => 'StripTags'),
-                    array('name' => 'StringTrim'),
+                    array(
+                        'name' => 'StripTags'
+                    ),
+                    array(
+                        'name' => 'StringTrim'
+                    )
                 ),
                 'validators' => array(
                     array(
@@ -62,10 +69,10 @@ class ContactModel implements InputFilterAwareInterface
                         'options' => array(
                             'encoding' => 'UTF-8',
                             'min' => 1,
-                            'max' => 100,
-                        ),
-                    ),
-                ),
+                            'max' => 100
+                        )
+                    )
+                )
             ));
 
             $this->inputFilter = $inputFilter;
