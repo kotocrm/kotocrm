@@ -3,6 +3,7 @@ namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Zend\Stdlib\Hydrator\ClassMethods as ClassMethodsHydrator;
 
 abstract class CrudController extends AbstractActionController
 {
@@ -12,21 +13,30 @@ abstract class CrudController extends AbstractActionController
      * @var \Doctrine\ORM\EntityManager
      */
     protected $em;
-    
+
     protected $entity;
-    
+
     protected $form;
-    
+
     protected $filter;
 
+    /**
+     * @return object
+     */
     abstract protected function getEntity();
 
+    /**
+     * @return \Zend\Form\Form
+     */
     abstract protected function getForm();
 
+    /**
+     * @return \Zend\InputFilter\InputFilterAwareInterface
+     */
     abstract protected function getFilter();
 
     /**
-     * 
+     *
      * @return string
      */
     protected function getEntityClass()
@@ -35,7 +45,7 @@ abstract class CrudController extends AbstractActionController
     }
 
     /**
-     * 
+     *
      * @param integer $id
      * @return object
      */
@@ -82,7 +92,7 @@ abstract class CrudController extends AbstractActionController
     protected function save(array $data)
     {
         $em = $this->getEm();
-        $hydrator = new \Zend\Stdlib\Hydrator\ClassMethods();
+        $hydrator = new ClassMethodsHydrator();
         $entity = $this->getEntity();
         $hydrator->hydrate($data, $entity);
         $em->persist($entity);
@@ -131,9 +141,8 @@ abstract class CrudController extends AbstractActionController
             $this->processAdd($form, $postData);
         }
 
-        return new ViewModel(array(
-            'form' => $form,
-        ));
+        $view = new ViewModel(array('form' => $form));
+        return $view->setTemplate('application/index/form');
     }
 
     /**
@@ -144,7 +153,7 @@ abstract class CrudController extends AbstractActionController
     protected function update(array $data, $entity)
     {
         $em = $this->getEm();
-        $hydrator = new \Zend\Stdlib\Hydrator\ClassMethods();
+        $hydrator = new ClassMethodsHydrator();
         $hydrator->hydrate($data, $entity);
         $em->persist($entity);
         $em->flush();
@@ -183,6 +192,8 @@ abstract class CrudController extends AbstractActionController
         $form = $this->getForm();
         $em = $this->getEm();
         $entity = $em->find($this->getEntityClass(), $id);
+        $form->setHydrator(new ClassMethodsHydrator());
+        $form->bind($entity);
 
         if ($this->getRequest()->isPost()) {
             $postData = $this->params()->fromPost();
@@ -190,9 +201,8 @@ abstract class CrudController extends AbstractActionController
             $this->processEdit($form, $postData, $entity);
         }
 
-        return new ViewModel(array(
-            'entity' => $entity
-        ));
+        $view = new ViewModel(array('form' => $form));
+        return $view->setTemplate('application/index/form');
     }
 
     /**
