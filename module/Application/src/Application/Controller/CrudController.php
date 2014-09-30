@@ -60,23 +60,32 @@ abstract class CrudController extends AbstractActionController
         $em->flush();
     }
 
+    protected function prepareForm($form, $data)
+    {
+        $filter = $this->getFilter();
+        $form->setInputFilter($filter->getInputFilter());
+        $form->setData($data);
+    }
+
+    protected function processAdd($form, $data)
+    {
+        if ($form->isValid()) {
+            $this->save($data);
+            $this->flashMessenger()->addInfoMessage('Registro cadastrado com sucesso.');
+            $this->redirect()->toRoute('application', array(
+                'action' => 'index'
+            ));
+        }
+    }
+
     public function addAction()
     {
         $form = $this->getForm();
 
         if ($this->getRequest()->isPost()) {
-            $filter = $this->getFilter();
             $postData = $this->params()->fromPost();
-            $form->setInputFilter($filter->getInputFilter());
-            $form->setData($postData);
-
-            if ($form->isValid()) {
-                $this->save($postData);
-                $this->flashMessenger()->addInfoMessage('Registro cadastrado com sucesso.');
-                $this->redirect()->toRoute('application', array(
-                    'action' => 'index'
-                ));
-            }
+            $this->prepareForm($form, $postData);
+            $this->processAdd($form, $postData);
         }
 
         return new ViewModel(array(
@@ -93,6 +102,17 @@ abstract class CrudController extends AbstractActionController
         $em->flush();
     }
 
+    protected function processEdit($form, $data, $entity)
+    {
+        if ($form->isValid()) {
+            $this->update($data, $entity);
+            $this->flashMessenger()->addInfoMessage('Registro atualizado com sucesso.');
+            $this->redirect()->toRoute('application', array(
+                'action' => 'index'
+            ));
+        }
+    }
+
     public function editAction()
     {
         $id = (int) $this->params()->fromRoute('id', 0);
@@ -106,18 +126,9 @@ abstract class CrudController extends AbstractActionController
         $entity = $em->find($this->getEntityClass(), $id);
 
         if ($this->getRequest()->isPost()) {
-            $filter = $this->getFilter();
             $postData = $this->params()->fromPost();
-            $form->setInputFilter($filter->getInputFilter());
-            $form->setData($postData);
-
-            if ($form->isValid()) {
-                $this->update($postData, $entity);
-                $this->flashMessenger()->addInfoMessage('Registro atualizado com sucesso.');
-                $this->redirect()->toRoute('application', array(
-                    'action' => 'index'
-                ));
-            }
+            $this->prepareForm($form, $postData);
+            $this->processEdit($form, $postData, $entity);
         }
 
         return new ViewModel(array(
