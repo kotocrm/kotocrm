@@ -9,48 +9,38 @@ class IndexController extends CrudController
 {
 
     /**
-     * 
-     * @return string
-     */
-    public function getEntityClass()
-    {
-        return 'Application\Entity\Contact';
-    }
-
-    /**
-     * 
+     * Entidade do CRUD.
      * @return \Application\Entity\Contact
      */
     protected function getEntity()
     {
-        return new ContactEntity();
+        if ($this->entity === null) {
+            $this->entity = new ContactEntity();
+        }
+        return $this->entity;
     }
 
     /**
-     * 
-     * @param integer $id
-     * @return \Application\Entity\Contact
-     */
-    public function getEntityById($id)
-    {
-        return $this->getEm()->find('Application\Entity\Contact', $id);
-    }
-
-    /**
-     * 
+     * Formulário do CRUD.
      * @return \Application\Form\Contact
      */
     protected function getForm()
     {
-        return new ContactForm();
+        if ($this->form === null) {
+            $this->form = new ContactForm();
+        }
+        return $this->form;
     }
 
     /**
-     * 
+     * Filtro para o formulário do CRUD.
      * @return \Application\Filter\Contact
      */
     protected function getFilter()
     {
-        return new ContactFilter();
+        if ($this->filter === null) {
+            $this->filter = new ContactFilter();
+        }
+        return $this->filter;
     }
 }
