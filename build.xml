@@ -25,8 +25,8 @@
 
   <exec executable="${basedir}/build/tools/phpab.phar">
    <arg value="--output" />
-   <arg path="src/autoload.php" />
-   <arg path="src" />
+   <!--<arg path="module/autoload.php" />-->
+   <arg path="module" />
   </exec>
  </target>
 
@@ -34,7 +34,7 @@
   <apply executable="php" failonerror="true">
    <arg value="-l" />
 
-   <fileset dir="${basedir}/src">
+   <fileset dir="${basedir}/module">
     <include name="**/*.php" />
     <modified />
    </fileset>
@@ -49,8 +49,8 @@
  <target name="phploc" description="Measure project size using PHPLOC">
   <exec executable="${basedir}/build/tools/phploc.phar">
    <arg value="--count-tests" />
-   <arg path="${basedir}/src" />
-   <arg path="${basedir}/tests" />
+   <arg path="${basedir}/module" />
+   <!--<arg path="${basedir}/tests" />-->
   </exec>
  </target>
 
@@ -61,8 +61,8 @@
    <arg path="${basedir}/build/logs/phploc.csv" />
    <arg value="--log-xml" />
    <arg path="${basedir}/build/logs/phploc.xml" />
-   <arg path="${basedir}/src" />
-   <arg path="${basedir}/tests" />
+   <arg path="${basedir}/module" />
+   <!--<arg path="${basedir}/tests" />-->
   </exec>
  </target>
 
@@ -71,7 +71,7 @@
    <arg value="--jdepend-xml=${basedir}/build/logs/jdepend.xml" />
    <arg value="--jdepend-chart=${basedir}/build/pdepend/dependencies.svg" />
    <arg value="--overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg" />
-   <arg path="${basedir}/src" />
+   <arg path="${basedir}/module" />
   </exec>
  </target>
 
