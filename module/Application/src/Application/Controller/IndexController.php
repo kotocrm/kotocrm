@@ -24,11 +24,10 @@ class IndexController extends CrudController
      * Formulário do CRUD.
      * @return \Application\Form\Contact
      */
-    protected function getForm()
-    {
-        if ($this->form === null) {
-            $this->form = new ContactForm();
+    protected function getForm() {
+        if ($this->form === null) { $this->form = new ContactForm();
         }
+        // Teste phpcs
         return $this->form;
     }
 
