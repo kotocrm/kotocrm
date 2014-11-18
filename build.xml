@@ -21,8 +21,6 @@
  </target>
 
  <target name="generate-code" description="Generate Currency-specific subclasses of Money and autoloader code">
-  <exec executable="${basedir}/build/generate-child-classes.php"/>
-
   <exec executable="${basedir}/build/tools/phpab.phar">
    <arg value="--output" />
    <!--<arg path="module/autoload.php" />-->
@@ -39,10 +37,10 @@
     <modified />
    </fileset>
 
-   <fileset dir="${basedir}/tests">
+   <!--<fileset dir="${basedir}/tests">
     <include name="**/*.php" />
     <modified />
-   </fileset>
+   </fileset>-->
   </apply>
  </target>
 
@@ -128,12 +126,12 @@
   </exec>
  </target>
 
- <target name="phpunit" depends="prepare" description="Run unit tests with PHPUnit">
+ <!--<target name="phpunit" depends="prepare" description="Run unit tests with PHPUnit">
   <exec executable="${basedir}/build/tools/phpunit.phar" failonerror="true">
    <arg value="--configuration"/>
    <arg path="${basedir}/build/phpunit.xml"/>
   </exec>
- </target>
+ </target>-->
 
  <target name="phpdox" depends="phploc-ci,phpcs-ci,phpmd-ci" description="Generate API documentation using phpDox">
   <exec executable="${basedir}/build/tools/phpdox.phar" dir="${basedir}/build"/>
